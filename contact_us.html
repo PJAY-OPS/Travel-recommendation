@@ -1,21 +1,39 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Contact Us</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact Us - Travel Recommendation</title>
+<style>
+body{font-family:Arial;margin:0;background:#f4f4f4}
+nav{background:#333;padding:15px;text-align:center}
+nav a{color:white;margin:0 15px;text-decoration:none}
+.container{max-width:600px;margin:50px auto;background:white;padding:30px;border-radius:8px}
+input,textarea{width:100%;padding:10px;margin:10px 0;border:1px solid #ccc;border-radius:4px}
+button{background:#007bff;color:white;padding:12px 20px;border:none;border-radius:4px;cursor:pointer;width:100%}
+h1{text-align:center}
+</style>
 </head>
 <body>
 <nav>
-<a href="travel_recommendation.html">Home</a> |
-<a href="about_us.html">About Us</a> |
+<a href="travel_recommendation.html">Home</a>
+<a href="about_us.html">About Us</a>
 <a href="contact_us.html">Contact Us</a>
 </nav>
-<h1>CONTACT US</h1>
-<p>Get in touch with us</p>
-<form>
-<input type="text" placeholder="Name"><br><br>
-<input type="email" placeholder="Email"><br><br>
-<textarea placeholder="Message"></textarea><br><br>
+<div class="container">
+<h1>Contact Us</h1>
+<p>Get in touch with us! Fill out the form below.</p>
+<form id="contactForm">
+<label for="name">Name</label>
+<input type="text" id="name" name="Name" placeholder="Enter your Name" required>
+<label for="email">Email</label>
+<input type="email" id="email" name="Email" placeholder="Enter your Email" required>
+<label for="message">Message</label>
+<textarea id="message" name="Message" rows="5" placeholder="Enter your Message" required></textarea>
 <button type="submit">Submit</button>
 </form>
+</div>
+<script>
+document.getElementById('contactForm').addEventListener('submit',function(e){e.preventDefault();alert('Thank you for contacting us!');});
+</script>
 </body>
 </html>
