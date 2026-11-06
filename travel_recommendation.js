@@ -1,39 +1,97 @@
-const searchBtn = document.getElementById('searchBtn');
-const clearBtn = document.getElementById('clearBtn');
-const resultDiv = document.getElementById('result');
+document.addEventListener("DOMContentLoaded", () => {
+    const searchBtn = document.getElementById("btnSearch");
+    const clearBtn = document.getElementById("btnClear");
+    const searchInput = document.getElementById("searchInput");
+    const resultDiv = document.getElementById("result");
 
-function searchCondition() {
-  const input = document.getElementById('searchInput').value.toLowerCase().trim();
-  resultDiv.innerHTML = '';
+    let data = null;
 
-  fetch('./travel_recommendation_api.json')
-    .then(res => res.json())
-    .then(data => {
-      let results = [];
-      if (input === 'beach' || input === 'beaches') results = data.beaches;
-      else if (input === 'temple' || input === 'temples') results = data.temples;
-      else if (input === 'country' || input === 'countries') {
-        data.countries.forEach(c => c.cities.forEach(city => results.push(city)));
-      } else {
-        data.countries.forEach(c => {
-          if (c.name.toLowerCase().includes(input)) c.cities.forEach(city => results.push(city));
-          c.cities.forEach(city => { if (city.name.toLowerCase().includes(input)) results.push(city); });
+    // Fetch data
+    fetch("travel_recommendation_api.json")
+        .then(response => response.json())
+        .then(jsonData => {
+            data = jsonData;
+            console.log("Data loaded");
+        })
+        .catch(error => {
+            console.error("Error loading JSON", error);
         });
-        data.beaches.forEach(b => { if (b.name.toLowerCase().includes(input)) results.push(b); });
-        data.temples.forEach(t => { if (t.name.toLowerCase().includes(input)) results.push(t); });
-      }
-      if (results.length) {
-        results.forEach(i => {
-          resultDiv.innerHTML += `<div><img src="${i.imageUrl}"><h3>${i.name}</h3><p>${i.description}</p></div>`;
+
+    // Search function
+    function doSearch() {
+        const query = searchInput.value.toLowerCase().trim();
+        if (!query || !data) return;
+
+        resultDiv.innerHTML = "";
+        let results = [];
+
+        if (query.includes("beach") || query === "beaches") {
+            results = data.beaches;
+        } else if (query.includes("temple") || query === "temples") {
+            results = data.temples;
+        } else if (query.includes("country") || query === "countries") {
+            // Show all countries cities
+            data.countries.forEach(country => {
+                results = results.concat(country.cities);
+            });
+        } else {
+            // Search for specific country name like japan, australia, brazil
+            data.countries.forEach(country => {
+                if (country.name.toLowerCase().includes(query)) {
+                    results = results.concat(country.cities);
+                } else {
+                    country.cities.forEach(city => {
+                        if (city.name.toLowerCase().includes(query)) {
+                            results.push(city);
+                        }
+                    });
+                }
+            });
+            // Also search temples and beaches by name
+            data.temples.forEach(t => {
+                if (t.name.toLowerCase().includes(query)) results.push(t);
+            });
+            data.beaches.forEach(b => {
+                if (b.name.toLowerCase().includes(query)) results.push(b);
+            });
+        }
+
+        if (results.length === 0) {
+            resultDiv.innerHTML = `<p style="color:white; background:rgba(0,0,0,0.5); padding:10px;">No results found for "${query}". Try beach, temple, or country.</p>`;
+            return;
+        }
+
+        results.forEach(place => {
+            const card = `
+                <div style="background:white; margin:15px 0; border-radius:10px; overflow:hidden; max-width:400px; box-shadow:0 4px 8px rgba(0,0,0,0.3);">
+                    <img src="${place.imageUrl}" alt="${place.name}" style="width:100%; height:200px; object-fit:cover;">
+                    <div style="padding:15px;">
+                        <h3 style="margin:0 0 10px 0;">${place.name}</h3>
+                        <p style="font-size:14px; color:#555;">${place.description}</p>
+                    </div>
+                </div>
+            `;
+            resultDiv.innerHTML += card;
         });
-      } else {
-        resultDiv.innerHTML = `No results`;
-      }
-    });
-}
-function clearSearch() {
-  document.getElementById('searchInput').value = '';
-  resultDiv.innerHTML = '';
-}
-searchBtn.addEventListener('click', searchCondition);
-clearBtn.addEventListener('click', clearSearch);
+    }
+
+    // Events
+    if (searchBtn) {
+        searchBtn.addEventListener("click", doSearch);
+    }
+
+    if (searchInput) {
+        searchInput.addEventListener("keypress", (e) => {
+            if (e.key === "Enter") {
+                doSearch();
+            }
+        });
+    }
+
+    if (clearBtn) {
+        clearBtn.addEventListener("click", () => {
+            searchInput.value = "";
+            resultDiv.innerHTML = "";
+        });
+    }
+});
