@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Travel Recommendation</title>
+<style>
+body { margin:0; font-family: Arial; background: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e') no-repeat center center fixed; background-size: cover; }
+nav { display:flex; justify-content:space-between; align-items:center; background: rgba(0,0,0,0.8); padding:10px 20px; color:white; }
+nav a { color:white; margin:0 10px; text-decoration:none; }
+#searchInput { padding:8px; border-radius:20px; border:none; width:200px; }
+#btnSearch, #btnClear { padding:8px 15px; border:none; border-radius:5px; background:#0a6b6b; color:white; cursor:pointer; margin-left:5px; }
+#result { display:grid; grid-template-columns:1fr; gap:20px; padding:20px; max-width:800px; margin:20px auto; }
+.card { background:white; border-radius:10px; overflow:hidden; box-shadow:0 4px 8px rgba(0,0,0,0.3); }
+.card img { width:100%; height:250px; object-fit:cover; }
+.card-body { padding:15px; }
+.hero { color:white; padding:100px 50px; background: rgba(0,0,0,0.4); min-height:80vh; }
+</style>
+</head>
+<body>
+
+<nav>
+<div><strong>✈️ TravelBloom</strong> 
+<a href="travel_recommendation.html">Home</a>
+<a href="about_us.html">About Us</a>
+<a href="contact_us.html">Contact Us</a>
+</div>
+<div>
+<input type="text" id="searchInput" placeholder="Enter a destination or keyword">
+<button id="btnSearch">Search</button>
+<button id="btnClear">Clear</button>
+</div>
+</nav>
+
+<div class="hero">
+<h1>EXPLORE<br>DREAM<br>DESTINATION</h1>
+<p>It encourages exploration of unfamiliar territories, embracing diverse cultures and landscapes, while pursuing the desired destination that captivates the heart and ignites a sense of wonder.</p>
+</div>
+
+<div id="result"></div>
+
+<script src="travel_recommendation.js"></script>
+</body>
+</html>
